@@ -5,7 +5,7 @@ using UnityEngine;
 public class Byte : MonoBehaviour
 {
     [SerializeField] Bit[] bits = new Bit[8];
-    [SerializeField] int value = 0;
+    [SerializeField] public int value = 0;
 
     void Start() // Fixed the capitalization to Start() instead of start()
     {
@@ -15,6 +15,12 @@ public class Byte : MonoBehaviour
     void Update()
     {
         Bin2Dec();
+
+    }
+    public string getHex()
+    {
+        string HexValue = value.ToString("X2");
+        return HexValue;
     }
 
     public void Bin2Dec()
