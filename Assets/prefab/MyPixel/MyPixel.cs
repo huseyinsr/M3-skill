@@ -2,10 +2,11 @@ using UnityEngine;
 
 public class MyPixel : MonoBehaviour
 {
-    public Byte ByteR;  // Byte voor Rood
-    public Byte ByteG;  // Byte voor Groen
-    public Byte ByteB;  // Byte voor Blauw
-    public GameObject Pixel;  // GameObject voor de sprite
+    [Range(0, 255)] public byte ByteR;
+    [Range(0, 255)] public byte ByteG;
+    [Range(0, 255)] public byte ByteB;
+
+    public GameObject Pixel;  // Child GameObject met SpriteRenderer
     private SpriteRenderer spriteRenderer;
 
     void Start()
@@ -14,34 +15,34 @@ public class MyPixel : MonoBehaviour
         {
             spriteRenderer = Pixel.GetComponent<SpriteRenderer>();
         }
+        else
+        {
+            Debug.LogError("Pixel GameObject is niet toegewezen!");
+        }
     }
-
-
 
     void Update()
     {
-            if (ByteR != null && ByteG != null && ByteB != null && Pixel != null)
+        if (spriteRenderer != null)
+        {
+            string colorCode = $"#{ByteR:X2}{ByteG:X2}{ByteB:X2}";
+            // Debug.Log(colorCode);
+
+            if (ColorUtility.TryParseHtmlString(colorCode, out Color newColor))
             {
-                // Declare the colorCode variable before using it
-                string colorCode = "#" + ByteR.getHex() + ByteG.getHex() + ByteB.getHex();
-                 print(colorCode);
-
-
-
-            if (UnityEngine.ColorUtility.TryParseHtmlString(colorCode, out Color newColor))
-                {
-                    spriteRenderer.color = newColor;
-                }
-                else
-                {
-                    Debug.LogError("Ongeldige hex kleur: " + colorCode);
-                }
+                spriteRenderer.color = newColor;
             }
             else
             {
-                Debug.LogError("Een van de Byte-objecten of de Pixel ontbreekt!");
+                Debug.LogError("Ongeldige hex kleur: " + colorCode);
             }
+        }
+    }
 
-
+    public void SetColor(Color32 kleur)
+    {
+        ByteR = kleur.r;
+        ByteG = kleur.g;
+        ByteB = kleur.b;
     }
 }
